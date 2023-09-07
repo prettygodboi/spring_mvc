@@ -33,6 +33,8 @@ Languages
     </c:forEach>
 
 </ul>
+<br>
+Phone number ${employee.phoneNumber}
 
 </body>
 </html>
