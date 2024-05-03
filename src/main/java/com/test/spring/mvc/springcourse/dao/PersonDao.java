@@ -24,4 +24,8 @@ public class PersonDao {
     public Person getPersonById(int id){
         return people.stream().filter(person -> person.getId() == id).findFirst().orElse(null);
     }
+
+    public void createNewPerson(Person person) {
+        people.add(person);
+    }
 }
