@@ -29,8 +29,7 @@ public class PeopleController {
     }
 
     @GetMapping("/new")
-    public String createPersonPage(Model model) {
-        model.addAttribute("person", new Person());
+    public String createPersonPage(@ModelAttribute(value = "person") Person person) {
         return "people/new";
     }
 
