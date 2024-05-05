@@ -3,9 +3,11 @@ package com.test.spring.mvc.springcourse.controllers;
 import com.oracle.wls.shaded.org.apache.xpath.operations.Mod;
 import com.test.spring.mvc.springcourse.dao.PersonDao;
 import com.test.spring.mvc.springcourse.models.Person;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
@@ -35,7 +37,10 @@ public class PeopleController {
     }
 
     @PostMapping()
-    public String createPerson(@ModelAttribute(value = "person") Person person) {
+    public String createPerson(@ModelAttribute(value = "person") @Valid Person person, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return "people/new";
+        }
         dao.createNewPerson(person);
         return "redirect:people";
     }
@@ -47,7 +52,10 @@ public class PeopleController {
     }
 
     @PatchMapping("/{id}")
-    public String updatePerson(@PathVariable(value = "id") int id, @ModelAttribute(value = "person") Person person) {
+    public String updatePerson(@PathVariable(value = "id") int id, @ModelAttribute(value = "person") @Valid Person person, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return "people/edit";
+        }
         dao.editPerson(id, person);
         return "redirect:/people";
     }

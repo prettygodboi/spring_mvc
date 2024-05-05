@@ -33,8 +33,9 @@ public class PersonDao {
 
     public void editPerson(int id, Person person) {
         Person updatedPerson = getPersonById(id);
-        updatedPerson.setId(person.getId());
         updatedPerson.setName(person.getName());
+        updatedPerson.setAge(person.getAge());
+        updatedPerson.setEmail(person.getEmail());
     }
 
     public void deletePerson(int id) {
