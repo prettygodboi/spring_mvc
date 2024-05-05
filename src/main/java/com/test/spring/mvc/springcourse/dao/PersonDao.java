@@ -8,13 +8,14 @@ import java.util.List;
 @Component
 public class PersonDao {
     private List<Person> people;
+    private static int COUNT_PEOPLE;
 
     {
         people = new ArrayList<>();
-        people.add(new Person(1,"Dima"));
-        people.add(new Person(2,"Vas"));
-        people.add(new Person(3,"Bob"));
-        people.add(new Person(4,"Mike"));
+        people.add(new Person(++COUNT_PEOPLE,"Dima", 18, "ddsa.sda"));
+        people.add(new Person(++COUNT_PEOPLE,"Vas",123,"asad.dss"));
+        people.add(new Person(++COUNT_PEOPLE,"Bob", 21, "sadas.sda"));
+        people.add(new Person(++COUNT_PEOPLE,"Mike", 562,"sad.ccc"));
     }
 
     public List<Person> getPeople(){
@@ -26,6 +27,17 @@ public class PersonDao {
     }
 
     public void createNewPerson(Person person) {
+        person.setId(++COUNT_PEOPLE);
         people.add(person);
+    }
+
+    public void editPerson(int id, Person person) {
+        Person updatedPerson = getPersonById(id);
+        updatedPerson.setId(person.getId());
+        updatedPerson.setName(person.getName());
+    }
+
+    public void deletePerson(int id) {
+        people.removeIf(person -> person.getId() == id);
     }
 }

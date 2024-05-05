@@ -1,5 +1,6 @@
 package com.test.spring.mvc.springcourse.controllers;
 
+import com.oracle.wls.shaded.org.apache.xpath.operations.Mod;
 import com.test.spring.mvc.springcourse.dao.PersonDao;
 import com.test.spring.mvc.springcourse.models.Person;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,9 +34,27 @@ public class PeopleController {
         return "people/new";
     }
 
-    @PostMapping
+    @PostMapping()
     public String createPerson(@ModelAttribute(value = "person") Person person) {
         dao.createNewPerson(person);
         return "redirect:people";
+    }
+
+    @GetMapping("/{id}/edit")
+    public String editPage(@PathVariable(value = "id") int id, Model model){
+        model.addAttribute("person", dao.getPersonById(id));
+        return "people/edit";
+    }
+
+    @PatchMapping("/{id}")
+    public String updatePerson(@PathVariable(value = "id") int id, @ModelAttribute(value = "person") Person person) {
+        dao.editPerson(id, person);
+        return "redirect:/people";
+    }
+
+    @DeleteMapping("/{id}")
+    public String deletePerson(@PathVariable(value = "id") int id) {
+        dao.deletePerson(id);
+        return "redirect:/people";
     }
 }

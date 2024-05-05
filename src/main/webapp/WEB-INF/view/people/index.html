@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" >
 <head>
     <meta charset="UTF-8">
     <title>All people</title>
@@ -9,6 +9,9 @@
 <div th:each="person : ${peopleList}">
     <a th:href="@{people/{id}(id=${person.getId()})}" th:text="${person.getName()}">user</a>
 </div>
+<br>
+<hr/>
 
+<a href="people/new">Create new person</a>
 </body>
 </html>
