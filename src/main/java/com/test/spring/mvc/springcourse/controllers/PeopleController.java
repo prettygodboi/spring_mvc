@@ -1,10 +1,9 @@
 package com.test.spring.mvc.springcourse.controllers;
 
-import com.oracle.wls.shaded.org.apache.xpath.operations.Mod;
 import com.test.spring.mvc.springcourse.dao.PersonDao;
 import com.test.spring.mvc.springcourse.models.Person;
+import com.test.spring.mvc.springcourse.util.PersonValidator;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -14,9 +13,11 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/people")
 public class PeopleController {
     private final PersonDao dao;
+    private final PersonValidator personValidator;
 
-    public PeopleController(PersonDao dao) {
+    public PeopleController(PersonDao dao, PersonValidator personValidator) {
         this.dao = dao;
+        this.personValidator = personValidator;
     }
 
     @GetMapping()
@@ -38,6 +39,7 @@ public class PeopleController {
 
     @PostMapping()
     public String createPerson(@ModelAttribute(value = "person") @Valid Person person, BindingResult bindingResult) {
+        personValidator.validate(person, bindingResult);
         if (bindingResult.hasErrors()) {
             return "people/new";
         }
@@ -53,6 +55,7 @@ public class PeopleController {
 
     @PatchMapping("/{id}")
     public String updatePerson(@PathVariable(value = "id") int id, @ModelAttribute(value = "person") @Valid Person person, BindingResult bindingResult) {
+        personValidator.validate(person, bindingResult);
         if (bindingResult.hasErrors()) {
             return "people/edit";
         }
