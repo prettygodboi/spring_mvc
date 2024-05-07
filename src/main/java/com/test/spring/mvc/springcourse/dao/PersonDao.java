@@ -1,5 +1,6 @@
 package com.test.spring.mvc.springcourse.dao;
 
+import com.test.spring.mvc.springcourse.models.Book;
 import com.test.spring.mvc.springcourse.models.Person;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
@@ -23,31 +24,34 @@ public class PersonDao {
     }
 
     public List<Person> getPeople() {
-        return jdbcTemplate.query("SELECT * FROM person", new PersonMapper());
+        return jdbcTemplate.query("SELECT * FROM people", new PersonMapper());
     }
 
     public Optional<Person> getPersonByEmail(String email) {
-        return jdbcTemplate.query("SELECT * FROM person WHERE email=?", new BeanPropertyRowMapper<>(Person.class), new Object[]{email})
+        return jdbcTemplate.query("SELECT * FROM people WHERE email=?", new BeanPropertyRowMapper<>(Person.class), new Object[]{email})
                 .stream().findAny();
     }
 
     public Person getPersonById(int id) {
-
-        return jdbcTemplate.query("SELECT * FROM person WHERE id=?", new BeanPropertyRowMapper<>(Person.class), new Object[]{id})
+        return jdbcTemplate.query("SELECT * FROM people WHERE id=?", new BeanPropertyRowMapper<>(Person.class), new Object[]{id})
                 .stream().findAny().orElse(null);
     }
 
+    public List<Book> getBooksByPersonId(int id) {
+        return jdbcTemplate.query("SELECT * FROM books WHERE person_id=?", new BeanPropertyRowMapper<>(Book.class), new Object[]{id});
+    }
+
     public void createNewPerson(Person person) {
-        jdbcTemplate.update("INSERT INTO person(name, age, email) VALUES(?,?,?)", person.getName(), person.getAge(), person.getEmail());
+        jdbcTemplate.update("INSERT INTO people(name, age, email) VALUES(?,?,?)", person.getName(), person.getAge(), person.getEmail());
     }
 
     public void editPerson(int id, Person updatedPerson) {
-        jdbcTemplate.update("UPDATE person SET name=?, age=?, email=? WHERE id=?", updatedPerson.getName(), updatedPerson.getAge(), updatedPerson.getEmail(), id);
+        jdbcTemplate.update("UPDATE people SET name=?, age=?, email=? WHERE id=?", updatedPerson.getName(), updatedPerson.getAge(), updatedPerson.getEmail(), id);
 
     }
 
     public void deletePerson(int id) {
-        jdbcTemplate.update("DELETE FROM person WHERE id=?", id);
+        jdbcTemplate.update("DELETE FROM people WHERE id=?", id);
     }
 
     public void testMultipleUpdate() {
