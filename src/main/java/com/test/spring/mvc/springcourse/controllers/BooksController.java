@@ -30,7 +30,7 @@ public class BooksController {
     }
 
     @GetMapping("/{id}")
-    public String showBook(@PathVariable(value = "id") int id, Model model, @ModelAttribute(value = "person") Person person) {
+    public String showBook(@PathVariable(value = "id") int id, @ModelAttribute(value = "person") Person person, Model model) {
         model.addAttribute("book", bookDao.getBookById(id));
         Optional<Person> bookOwner = bookDao.getBookOwner(id);
 
