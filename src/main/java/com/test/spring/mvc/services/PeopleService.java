@@ -3,10 +3,13 @@ package com.test.spring.mvc.services;
 import com.test.spring.mvc.models.Book;
 import com.test.spring.mvc.models.Person;
 import com.test.spring.mvc.repositories.PeopleRepository;
+import org.hibernate.Hibernate;
+import org.hibernate.annotations.Cascade;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -34,7 +37,13 @@ public class PeopleService {
     }
 
     public List<Book> findBooksByPersonId(Long id) {
-        return this.findOne(id).getBooks();
+        Optional<Person> person = peopleRepository.findById(id);
+        if (person.isPresent()) {
+            Hibernate.initialize(person.get().getBooks());
+            return person.get().getBooks();
+        } else {
+            return Collections.emptyList();
+        }
     }
 
     @Transactional
