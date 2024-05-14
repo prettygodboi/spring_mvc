@@ -1,4 +1,4 @@
-package com.test.spring.mvc.springcourse.controllers;
+package com.test.spring.mvc.controllers;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

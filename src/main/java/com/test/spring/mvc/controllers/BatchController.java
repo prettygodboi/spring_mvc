@@ -1,6 +1,6 @@
-package com.test.spring.mvc.springcourse.controllers;
+package com.test.spring.mvc.controllers;
 
-import com.test.spring.mvc.springcourse.dao.PersonDao;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,11 +9,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @RequestMapping("/batch")
 public class BatchController {
-    private final PersonDao personDao;
+//    private final PersonDao personDao;
 
     @Autowired
-    public BatchController(PersonDao personDao) {
-        this.personDao = personDao;
+    public BatchController() {
+//        this.personDao = personDao;
     }
 
     @GetMapping()
@@ -23,13 +23,13 @@ public class BatchController {
 
     @GetMapping("/without")
     public String noBatch() {
-        personDao.testMultipleUpdate();
+//        personDao.testMultipleUpdate();
         return "redirect:/people";
     }
 
     @GetMapping("/with")
     public String nBatch() {
-        personDao.testBatchUpdate();
+//        personDao.testBatchUpdate();
         return "redirect:/people";
     }
 }

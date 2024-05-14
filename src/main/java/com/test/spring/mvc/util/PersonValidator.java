@@ -1,7 +1,7 @@
-package com.test.spring.mvc.springcourse.util;
+package com.test.spring.mvc.util;
 
-import com.test.spring.mvc.springcourse.dao.PersonDao;
-import com.test.spring.mvc.springcourse.models.Person;
+import com.test.spring.mvc.models.Person;
+import com.test.spring.mvc.services.PeopleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
@@ -9,11 +9,11 @@ import org.springframework.validation.Validator;
 @Component
 public class PersonValidator implements Validator {
 
-    private final PersonDao personDao;
+    private final PeopleService peopleService;
 
     @Autowired
-    public PersonValidator(PersonDao personDao) {
-        this.personDao = personDao;
+    public PersonValidator(PeopleService peopleService1) {
+        this.peopleService = peopleService1;
     }
 
     @Override
@@ -25,7 +25,7 @@ public class PersonValidator implements Validator {
     public void validate(Object target, Errors errors) {
         Person person = (Person) target;
 
-        if (personDao.getPersonByEmail(person.getEmail()).isPresent()) {
+        if (peopleService.findPersonByEmail(person.getEmail()) != null) {
             errors.rejectValue("email", "", "This email is already taken");
         }
 

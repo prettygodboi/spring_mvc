@@ -1,4 +1,4 @@
-package com.test.spring.mvc.springcourse.config;
+package com.test.spring.mvc.config;
 
 import jakarta.servlet.DispatcherType;
 import jakarta.servlet.FilterRegistration;
