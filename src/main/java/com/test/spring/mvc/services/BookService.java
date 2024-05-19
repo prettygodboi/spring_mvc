@@ -51,7 +51,6 @@ public class BookService {
         return booksRepository.findByTitleStartingWith(title);
     }
 
-    @Transactional
     public void save(Book book) {
         booksRepository.save(book);
     }
@@ -74,7 +73,6 @@ public class BookService {
         booksRepository.findById(id).ifPresent(book -> {
             book.setOwner(selectedPerson);
         });
-        this.findOne(id).setOwner(selectedPerson);
     }
 
     @Transactional
@@ -82,6 +80,5 @@ public class BookService {
         booksRepository.findById(id).ifPresent(book -> {
             book.setOwner(null);
         });
-        this.findOne(id).setOwner(null);
     }
 }

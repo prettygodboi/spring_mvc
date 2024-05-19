@@ -7,6 +7,7 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -34,6 +35,6 @@ public class Person {
     private String email;
 
     @OneToMany(mappedBy = "owner")
-    private List<Book> books;
+    private List<Book> books = new ArrayList<>();
 
 }

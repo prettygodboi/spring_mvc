@@ -5,6 +5,7 @@ import com.test.spring.mvc.models.Person;
 import com.test.spring.mvc.services.BookService;
 import com.test.spring.mvc.services.PeopleService;
 import jakarta.validation.Valid;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -13,18 +14,17 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Optional;
 
 @Controller
+@AllArgsConstructor
 @RequestMapping("/books")
 public class BooksController {
     private final PeopleService peopleService;
     private final BookService bookService;
 
-    public BooksController(PeopleService peopleService, BookService bookService) {
-        this.peopleService = peopleService;
-        this.bookService = bookService;
-    }
-
-    @GetMapping()
-    public String showBooks(Model model, @RequestParam(name = "page", required = false)Integer page, @RequestParam(name = "books_per_page",required = false) Integer booksPerPage, @RequestParam(name = "sort_by_year", required = false) boolean sortByYear) {
+    @GetMapping
+    public String showBooks(Model model,
+                            @RequestParam(name = "page", required = false)Integer page,
+                            @RequestParam(name = "books_per_page",required = false) Integer booksPerPage,
+                            @RequestParam(name = "sort_by_year", required = false) boolean sortByYear) {
         if (page==null || booksPerPage==null) {
             model.addAttribute("books", bookService.findAll(sortByYear));
         } else {
@@ -35,8 +35,9 @@ public class BooksController {
 
     @GetMapping("/{id}")
     public String showBook(@PathVariable(value = "id") Long id, @ModelAttribute(value = "person") Person person, Model model) {
-        model.addAttribute("book", bookService.findOne(id));
-        Person bookOwner = bookService.findBookOwner(id);
+        Book book = bookService.findOne(id);
+        model.addAttribute("book", book);
+        Person bookOwner = book.getOwner();
 
         if (bookOwner!=null) {
             model.addAttribute("owner", bookOwner);
@@ -51,7 +52,7 @@ public class BooksController {
         return "books/new";
     }
 
-    @PostMapping()
+    @PostMapping
     public String addNewBook(@ModelAttribute(value = "book") @Valid Book book, BindingResult bindingResult) {
         if (bindingResult.hasErrors()){
             return "books/new";

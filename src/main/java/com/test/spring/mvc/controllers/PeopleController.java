@@ -7,23 +7,20 @@ import com.test.spring.mvc.services.PeopleService;
 
 import com.test.spring.mvc.util.PersonValidator;
 import jakarta.validation.Valid;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
+@AllArgsConstructor
 @RequestMapping("/people")
 public class PeopleController {
     private final PersonValidator personValidator;
     private final PeopleService peopleService;
 
-    public PeopleController(PeopleService peopleService, PersonValidator personValidator) {
-        this.personValidator = personValidator;
-        this.peopleService = peopleService;
-    }
-
-    @GetMapping()
+    @GetMapping
     public String fetchAll(Model model){
         model.addAttribute("peopleList", peopleService.findAll());
         return "people/index";
@@ -41,7 +38,7 @@ public class PeopleController {
         return "people/new";
     }
 
-    @PostMapping()
+    @PostMapping
     public String createPerson(@ModelAttribute(value = "person") @Valid Person person, BindingResult bindingResult) {
         personValidator.validate(person, bindingResult);
         if (bindingResult.hasErrors()) {
