@@ -3,22 +3,18 @@ package com.test.spring.mvc.services;
 import com.test.spring.mvc.models.Book;
 import com.test.spring.mvc.models.Person;
 import com.test.spring.mvc.repositories.BooksRepository;
+import jakarta.persistence.EntityNotFoundException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
-@Transactional(readOnly = true)
+@RequiredArgsConstructor
 public class BookService {
     private final BooksRepository booksRepository;
-
-    public BookService(BooksRepository booksRepository) {
-        this.booksRepository = booksRepository;
-    }
 
     public List<Book> findAll(boolean sortByYear) {
         if (sortByYear) {
@@ -37,14 +33,7 @@ public class BookService {
     }
 
     public Book findOne(Long id) {
-        Optional<Book> book = booksRepository.findById(id);
-        return book.orElse(null);
-    }
-
-    public Person findBookOwner(Long id) {
-        Optional<Book> book = booksRepository.findById(id);
-
-        return book.get().getOwner();
+        return booksRepository.findById(id).orElseThrow(EntityNotFoundException::new);
     }
 
     public List<Book> findByTitle(String title) {
@@ -55,30 +44,28 @@ public class BookService {
         booksRepository.save(book);
     }
 
-    @Transactional
     public void update(Long id, Book updatedBook) {
-        Book book = booksRepository.findById(id).get();
+        Book book = booksRepository.findById(id).orElseThrow(EntityNotFoundException::new);
         updatedBook.setId(id);
         updatedBook.setOwner(book.getOwner());
         booksRepository.save(updatedBook);
     }
 
-    @Transactional
     public void remove(Long id) {
         booksRepository.deleteById(id);
     }
 
-    @Transactional
     public void assign(Long id, Person selectedPerson) {
         booksRepository.findById(id).ifPresent(book -> {
             book.setOwner(selectedPerson);
+            booksRepository.save(book);
         });
     }
 
-    @Transactional
     public void release(Long id) {
         booksRepository.findById(id).ifPresent(book -> {
             book.setOwner(null);
+            booksRepository.save(book);
         });
     }
 }
